@@ -1,0 +1,31 @@
+#sidebarMenu {
+    height: 100%;
+    position: fixed;
+    right: 0;
+    width: 18rem;
+    margin-top: 0px;
+    top: 1rem;
+    background: #a03520;
+    color: #fff;
+    z-index: 1000;
+    padding-top: 75px;
+  }
+
+  #sidebarMenu .close-icon {
+    float: right;
+    margin-right: 1%;
+    margin-top: -50px;
+    cursor: pointer;
+    height: 2rem;
+    width: 2rem;
+  }
+
+//   #sidebarMenu a:first-child {
+//     margin-top: 2em;
+//   }
+
+  .sidebarMenuInner {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.10);
+  }

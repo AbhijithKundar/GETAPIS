@@ -1,2 +1,24 @@
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">Hello <h3></h3></a>
+    <button class="" *ngIf="!showMenu" (click)="showSideBarMenus()" tabindex="0" (keydown)="showSideBarMenus()">
+        <i class="material-icons fa-bars-menu">menu</i>
+      </button>
+  
+  </header>
+
+  <div id="sidebarMenu" *ngIf="showMenu">
+    <button class="global-header__actions__button  close-icon" *ngIf="showMenu" (click)="showSideBarMenus()" (keydown)="showSideBarMenus()">
+      <i class="material-icons">close</i>
+    </button>
+
+    <a class="d-block side-menu-item"  tabindex="0" [routerLink]="['']" (click)="hideMenu()" >Home</a>
+    <a class="d-block side-menu-item" tabindex="0" [routerLink]="['/login']"  (click)="hideMenu()">Login</a>
+    <a  tabindex="0" class="d-block side-menu-item" (click)="hideMenu()">Test</a>
+    <!--<a class="d-block side-menu-item" [routerLink]="['/fileupload']" *ngIf="configservice.loggedInUserType=='Internal Users'" (click)="hideMenu()">File Management</a>-->
+    <a  tabindex="0" class="d-block side-menu-item" (click)="hideMenu()">Logout</a>
+
+
+  </div>
+
 <router-outlet></router-outlet>
 <lib-ng-toast></lib-ng-toast>

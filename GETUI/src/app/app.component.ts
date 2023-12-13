@@ -7,4 +7,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'AngularAuthYtUI';
+  showMenu: boolean = false;
+
+  showSideBarMenus() {
+    this.showMenu = !this.showMenu;
+  }
+
+  hideMenu() {
+    this.showMenu = false;
+  }
 }
