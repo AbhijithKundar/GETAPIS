@@ -1,0 +1,32 @@
+
+.dashboard-container { 
+  background-color: white;
+  height: 100%;
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.di-card{
+margin-bottom: 1rem;
+}
+
+.bg-lb {
+  background-color: rgb(157, 220, 231);
+}
+
+.bg-lp {
+  background-color: rgb(223, 199, 243);
+}
+
+.bg-lg {
+  background-color: rgb(254, 240, 177);
+}
+
+.bg-lgr {
+  background-color: rgb(166, 232, 176);
+}
+
+.bg-lo {
+  background-color: rgb(237, 185, 176);
+}

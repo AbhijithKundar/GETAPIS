@@ -129,3 +129,18 @@ img {
 .toast-right-top {
     height: auto !important;
 }
+
+.d-block {
+    display: block !important;
+}
+
+.global-header__actions__button {
+    position: relative;
+    background: 0 0;
+    border: none;
+    padding: 0;
+    color: #ffffff;
+    width: 3.125rem;
+    height: 3.125rem;
+    line-height: 4.125rem;
+  }

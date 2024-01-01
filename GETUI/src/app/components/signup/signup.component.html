@@ -1,4 +1,3 @@
-<div class="outer">
   <div class="container">
       <div class="row">
           <div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3">
@@ -21,7 +20,22 @@
                               <div class="input-field" [class.error]="signUpForm.controls['email'].dirty && signUpForm.hasError('required','email')"> <span class="fa fa-user p-2"></span> <input formControlName="email" type="text" placeholder="Email"> </div>
                           </div>
                           <small *ngIf="signUpForm.controls['email'].dirty && signUpForm.hasError('required','email')" class="text-danger">*Email is required*</small>
-                         
+                          <div class="form-group pt-3">
+                            <div class="input-field" [class.error]="signUpForm.controls['planType'].dirty && signUpForm.hasError('required','planType')"> <span class="fa fa-user p-2"></span>
+                                 <select  formControlName="planType" class="form-select" placeholder="Plan Type">
+                                    <option value="" disabled selected>Plan Type</option>
+                                    <option *ngFor="let plan of planTypes" [value]="plan.id">{{plan.name}}</option>
+                                 </select>
+                        </div>
+                        </div>
+                        <small *ngIf="signUpForm.controls['planType'].dirty && signUpForm.hasError('required','planType')" class="text-danger">*Plan Type is required*</small>
+                       
+
+                          <div class="form-group pt-3">
+                            <div class="input-field" [class.error]="signUpForm.controls['referal'].dirty && signUpForm.hasError('required','referal')"> <span class="fa fa-user p-2"></span> <input formControlName="referal" type="text" placeholder="Reference ID"> </div>
+                        </div>
+                        <small *ngIf="signUpForm.controls['referal'].dirty && signUpForm.hasError('required','referal')" class="text-danger">*Reference ID is required*</small>
+                       
                           <button type="submit" class="btn btn-primary btn-block mt-4 w-100">Signup</button>
                           <div class="text-center pt-4 text-muted">Already have an account? <a id="forgot" routerLink="/login" href="#">Login</a> </div>
                       </form>
@@ -31,4 +45,3 @@
           </div>
       </div>
   </div>
-</div>

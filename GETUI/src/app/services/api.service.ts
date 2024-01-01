@@ -12,4 +12,13 @@ export class ApiService {
   getUsers() {
     return this.http.get<any>(`${this.baseUrl}user`);
   }
+
+  getMembersOnUserName(name: string) {
+    return this.http.get<any>(`${this.baseUrl}Member/getMembersForUser?userName=${name}`);
+  }
+
+  getDashboardOnUserName(name: string) {
+    return this.http.get<any>(`${this.baseUrl}Dashboard/GetDashboard?userName=${name}`);
+  }
+  
 }

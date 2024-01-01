@@ -64,6 +64,10 @@ export class AuthService {
   }
 
   renewToken(tokenApi : TokenApiModel){
-    return this.http.post<any>(`${this.baseUrl}refresh`, tokenApi)
+    return this.http.post<any>(`${this.baseUrl}user/refresh`, tokenApi)
+  }
+
+  getPlanTypes(){
+    return this.http.get<any>(`${this.baseUrl}PlanType/getPlanTypes`)
   }
 }

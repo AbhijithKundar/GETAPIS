@@ -15,6 +15,7 @@ using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using AngularAuthYtAPI.Models.Dto;
 using AngularAuthYtAPI.Utility;
+using AngularAuthYtAPI.Models.ViewModel;
 
 namespace AngularAuthYtAPI.Controllers
 {
@@ -73,40 +74,72 @@ namespace AngularAuthYtAPI.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> AddUser([FromBody] User userObj)
+        public async Task<IActionResult> AddUser([FromBody] UserModel userObj)
         {
-            if (userObj == null)
-                return BadRequest();
-
-            // check email
-            if (await CheckEmailExistAsync(userObj.Email))
-                return BadRequest(new { Message = "Email Already Exist" });
-
-            //check username
-            if (await CheckUsernameExistAsync(userObj.Username))
-                return BadRequest(new { Message = "Username Already Exist" });
-
-            //var passMessage = CheckPasswordStrength(userObj.Password);
-            //if (!string.IsNullOrEmpty(passMessage))
-            //    return BadRequest(new { Message = passMessage.ToString() });
-
-           var randomPassword = RandomString(8, true);
-            var userCount = await _authContext.Users.CountAsync();
-            userObj.Username = $"GET100{userCount}";
-
-            userObj.Password = PasswordHasher.HashPassword(randomPassword);
-            userObj.Role = "User";
-            userObj.Token = "";
-            await _authContext.AddAsync(userObj);
-            await _authContext.SaveChangesAsync();
-
-            var emailModel = new EmailModel(userObj.Email, "User Registered", EmailBodyUserInfo.EmailStringBodyUserInfo(userObj.Username, randomPassword));
-            _emailService.SendEmail(emailModel);
-            return Ok(new
+            try
             {
-                Status = 200,
-                Message = "User Registered. Please check your mailbox"
-            });
+
+
+                if (userObj == null)
+                    return BadRequest();
+
+                // check email
+                if (await CheckEmailExistAsync(userObj.Email))
+                    return BadRequest(new { Message = "Email Already Exist" });
+
+                //check username
+                if (await CheckUsernameExistAsync(userObj.Username))
+                    return BadRequest(new { Message = "Username Already Exist" });
+
+                if (!await CheckValidReferal(userObj.Referal))
+                    return BadRequest(new { Message = "Invalid Referral ID" });
+
+                //var passMessage = CheckPasswordStrength(userObj.Password);
+                //if (!string.IsNullOrEmpty(passMessage))
+                //    return BadRequest(new { Message = passMessage.ToString() });
+
+                var randomPassword = RandomString(8, true);
+                var userCount = await _authContext.Users.CountAsync();
+                var user = new User()
+                {
+                    Email = userObj.Email,
+                    FirstName = userObj.FirstName,
+                    LastName = userObj.LastName
+                };
+                user.Username = $"GET100{userCount}";
+
+                user.Password = PasswordHasher.HashPassword(randomPassword);
+                user.Role = "User";
+                user.Token = "";
+                await _authContext.AddAsync(user);
+                await _authContext.SaveChangesAsync();
+
+                var parentId = _authContext.Members.FirstOrDefault(x => x.Name.ToLower().Trim() == userObj.Referal.ToLower().Trim()).Id;
+
+                var member = new Member()
+                {
+                    Name = user.Username,
+                    ParentId = parentId,
+                    JoiningDate = DateTime.Now,
+                    PlanId = userObj.PlanType,
+                    UserId = user.Id
+                };
+                await _authContext.AddAsync(member);
+                await _authContext.SaveChangesAsync();
+
+                var emailModel = new EmailModel(userObj.Email, "User Registered", EmailBodyUserInfo.EmailStringBodyUserInfo(userObj.Username, randomPassword));
+                _emailService.SendEmail(emailModel);
+                return Ok(new
+                {
+                    Status = 200,
+                    Message = "User Registered. Please check your mailbox"
+                });
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         private Task<bool> CheckEmailExistAsync(string? email)
@@ -114,6 +147,9 @@ namespace AngularAuthYtAPI.Controllers
 
         private Task<bool> CheckUsernameExistAsync(string? username)
             => _authContext.Users.AnyAsync(x => x.Email == username);
+
+        private Task<bool> CheckValidReferal(string referal)
+            => _authContext.Users.AnyAsync(x => x.Username.ToLower().Trim() == referal.ToLower().Trim());
 
         private static string CheckPasswordStrength(string pass)
         {
@@ -199,7 +235,7 @@ namespace AngularAuthYtAPI.Controllers
 
         }
 
-       
+
         [HttpGet]
         public async Task<ActionResult<User>> GetAllUsers()
         {
@@ -255,7 +291,7 @@ namespace AngularAuthYtAPI.Controllers
 
                 throw;
             }
-           
+
         }
 
 
@@ -272,13 +308,13 @@ namespace AngularAuthYtAPI.Controllers
             var tokencode = user.ResetPasswordToken;
             var emailTokenExpiry = user.ResetPasswordTokenExpiryTime;
 
-            if(tokencode != restPasswordDto.EmailToken || emailTokenExpiry <DateTime.Now)
+            if (tokencode != restPasswordDto.EmailToken || emailTokenExpiry < DateTime.Now)
             {
                 return BadRequest(new { StatusCode = 400, Message = "Token is expired" });
             }
 
             user.Password = PasswordHasher.HashPassword(restPasswordDto.NewPassword);
-            _authContext.Entry(user).State= EntityState.Modified;
+            _authContext.Entry(user).State = EntityState.Modified;
             await _authContext.SaveChangesAsync();
             return Ok(new { StatusCode = 200, Message = "Password Reset Successful" });
         }

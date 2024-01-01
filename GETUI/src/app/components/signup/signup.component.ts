@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import ValidateForm from '../../helpers/validationform';
 import { Router } from '@angular/router';
+import { PlanTypeModel } from 'src/app/models/plantype.model';
 
 @Component({
   selector: 'app-signup',
@@ -15,6 +16,7 @@ export class SignupComponent implements OnInit {
   type: string = 'password';
   isText: boolean = false;
   eyeIcon:string = "fa-eye-slash"
+  planTypes:PlanTypeModel[] = [];
   constructor(private fb : FormBuilder, private auth: AuthService, private router: Router) { }
 
   ngOnInit() {
@@ -22,9 +24,17 @@ export class SignupComponent implements OnInit {
       firstName:['', Validators.required],
       lastName:['', Validators.required],
       email:['', Validators.required],
+      referal:['', Validators.required],
+      planType:['', Validators.required]
     })
+    this.getPlanTypes();
   }
 
+  getPlanTypes() {
+    this.auth.getPlanTypes().subscribe(res=> {
+        this.planTypes = res;
+    });
+  }
   hideShowPass(){
     this.isText = !this.isText;
     this.isText ? this.eyeIcon = 'fa-eye' : this.eyeIcon = 'fa-eye-slash'
@@ -32,7 +42,6 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit() {
-    debugger;
     if (this.signUpForm.valid) {
       console.log(this.signUpForm.value);
       let signUpObj = {
