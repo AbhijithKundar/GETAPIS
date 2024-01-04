@@ -1,4 +1,4 @@
-export class memberModel {
+export class MemberModel {
     public  id!:number;
     public userName!:string;
     public memberFullName!:string;

@@ -11,13 +11,15 @@ import { NgToastModule } from 'ng-angular-popup';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import {MatCardModule} from '@angular/material/card';
+import { MemberComponent } from './components/member/member.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SignupComponent,
-    DashboardComponent
+    DashboardComponent,
+    MemberComponent
   ],
   imports: [
     BrowserModule,

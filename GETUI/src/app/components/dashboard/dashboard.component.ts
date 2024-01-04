@@ -2,7 +2,6 @@ import { AuthService } from './../../services/auth.service';
 import { ApiService } from './../../services/api.service';
 import { Component, OnInit } from '@angular/core';
 import { UserStoreService } from 'src/app/services/user-store.service';
-import { memberModel } from 'src/app/models/member.model';
 import { dashboardModel } from 'src/app/models/dashboard.model';
 
 
@@ -13,7 +12,6 @@ import { dashboardModel } from 'src/app/models/dashboard.model';
 })
 export class DashboardComponent implements OnInit {
 
-  public levelMember:memberModel[] = [];
   public dashboardDetails:dashboardModel = new dashboardModel();
   public role!:string;
   public loaded:boolean = false;
