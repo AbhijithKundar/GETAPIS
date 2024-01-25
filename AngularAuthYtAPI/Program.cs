@@ -1,4 +1,6 @@
 using AngularAuthYtAPI.Context;
+using AngularAuthYtAPI.Repository.Implementation;
+using AngularAuthYtAPI.Repository.Interface;
 using AngularAuthYtAPI.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -28,8 +30,10 @@ builder.Services.AddDbContext<AppDbContext>(option =>
         TimeSpan.FromSeconds(100), null)
         );
 });
-
+builder.Services.AddMvc();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 
 builder.Services.AddAuthentication(x =>
 {

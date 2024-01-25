@@ -1,4 +1,5 @@
 ﻿using AngularAuthYtAPI.Models;
+using AngularAuthYtAPI.Models.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 
@@ -13,6 +14,7 @@ namespace AngularAuthYtAPI.Context
         public DbSet<User> Users { get; set; }
         public DbSet<PlanTypes> PlanTypes { get; set; }
         public DbSet<Member> Members { get; set; }
+        public virtual DbSet<TeamTree> TeamTree { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
