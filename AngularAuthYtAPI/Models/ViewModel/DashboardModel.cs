@@ -7,12 +7,12 @@
         }
 
         public int PackageValue { get; set; }
-        public int DirectIncome { get; set; }
-        public int AutofillIncome { get; set; }
-        public int TeamIncome { get; set; }
-        public int RewardIncome { get; set; }
-        public int MagicIncome { get; set; }
-        public int MonthlyIncome { get; set; }
+        public decimal DirectIncome { get; set; }
+        public decimal AutofillIncome { get; set; }
+        public decimal TeamIncome { get; set; }
+        public decimal RewardIncome { get; set; }
+        public decimal MagicIncome { get; set; }
+        public decimal MonthlyIncome { get; set; }
     }
 
 }

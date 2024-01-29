@@ -31,7 +31,24 @@ namespace AngularAuthYtAPI.Controllers
             return Ok(data);
         }
 
-     
+        [HttpGet("getTeamTree")]
+        public ActionResult GetTeamTree(string? userName)
+        {
+            var data = _repository.GetTeamTree(userName);
+            return Ok(data);
+        }
+
+        [HttpGet("getAutofillTree")]
+        public ActionResult GetAutofillTree(string? userName)
+        {
+            var data = _repository.GetAutofillTree(userName);
+            return Ok(data);
+        }
+        
+
+
+
+
 
     }
 }

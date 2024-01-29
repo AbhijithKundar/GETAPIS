@@ -10,9 +10,11 @@ namespace AngularAuthYtAPI.Repository.Implementation
     public class DashboardRepository : IDashboardRepository
     {
         private readonly AppDbContext _context;
-        public DashboardRepository(AppDbContext context)
+        private readonly IMemberRepository _memberRepository;
+        public DashboardRepository(AppDbContext context, IMemberRepository memberRepository)
         {
             _context = context;
+            _memberRepository = memberRepository;
         }
         public DashboardModel GetDashboard(string userName)
         {
@@ -37,8 +39,8 @@ namespace AngularAuthYtAPI.Repository.Implementation
                 var memberForUser = data.Where(x => x.parentId == member.Id && x.planId <= member.PlanId).ToList();
                 var sumOfDirect = memberForUser.Sum(x => x.rate);
                 dashboardModel.DirectIncome = sumOfDirect / 2;
-                dashboardModel.AutofillIncome = memberForUser.OrderBy(x => x.memberId).Take(6).Sum(x => x.rate) / 10;
-                dashboardModel.TeamIncome = 0;
+                dashboardModel.AutofillIncome = _memberRepository.GetTotalAffiliateIncome(member.Id);
+                dashboardModel.TeamIncome = _memberRepository.GetTotalTeamIncome(userName);
                 dashboardModel.RewardIncome = 0;
                 dashboardModel.MagicIncome = 0;
 

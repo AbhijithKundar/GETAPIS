@@ -3,6 +3,7 @@ using AngularAuthYtAPI.Models;
 using AngularAuthYtAPI.Models.ViewModel;
 using AngularAuthYtAPI.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 
 namespace AngularAuthYtAPI.Repository.Implementation
 {
@@ -42,27 +43,39 @@ namespace AngularAuthYtAPI.Repository.Implementation
                             JoiningDate = m.JoiningDate
                         }).ToList();
 
-            //var test = _context.Database.ExecuteSqlRaw("GetMembersTreeview {0}", 4);
-            var a = _context.TeamTree.FromSqlInterpolated($"EXEC [GetMembersTreeview] @id = 4").ToList();
-            var test = GetTeamTree(3);
+            //var a = _context.TeamTree.FromSqlInterpolated($"EXEC [GetMembersTreeview] @id = 4").ToList();
+            //var test = GetTeamTree(3);
             return data;
         }
 
-        private TeamTreeViewModel GetTeamTree(int id)
+        public List<TeamDetail> GetTeamDetails(int id)
+        {
+            var teamDetails = (from m in _context.Members
+                               join p in _context.PlanTypes on m.PlanId equals p.Id
+                               where m.Id >= id
+                               select new TeamDetail
+                               {
+                                   memberId = m.Id,
+                                   parentId = m.ParentId,
+                                   name = m.Name,
+                                   rate = p.Rate == null ? 0 : p.Rate,
+                                   planId = p.Id
+                               }).OrderBy(x => x.memberId).ToList();
+            return teamDetails;
+        }
+
+        /// <summary>
+        /// Team Tree for 10 levels
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+
+        public TeamTreeViewModel GetTeamTree(string? userName)
         {
             var model = new TeamTreeViewModel();
+            var member = GetMember(userName);
 
-            var ttt = from m in _context.Members
-                      join p in _context.PlanTypes on m.PlanId equals p.Id
-                      where m.Id >= id
-                      select new
-                      {
-                          memberId = m.Id,
-                          parentId = m.ParentId,
-                          name = m.Name,
-                          rate = p.Rate == null ? 0 : p.Rate,
-                          planId = p.Id
-                      };
+            var ttt = GetTeamDetails(member.Id);
             var mem = ttt.FirstOrDefault();
 
             model.Id = mem.memberId;
@@ -142,7 +155,17 @@ namespace AngularAuthYtAPI.Repository.Implementation
                         Name = i.name,
                         Level = 10,
                         ParentId = i.parentId,
-                        Rate = i.rate
+                        Rate = i.rate,
+                        TeamTree = ttt.Where(x => x.parentId == i.memberId).Any()
+                    ? ttt.Where(x => x.parentId == i.memberId).Select(j => new TeamTreeViewModel
+                    {
+                        Id = j.memberId,
+                        Name = j.name,
+                        Level = 10,
+                        ParentId = j.parentId,
+                        Rate = j.rate
+
+                    }).ToList() : new List<TeamTreeViewModel>()
 
                     }).ToList() : new List<TeamTreeViewModel>()
 
@@ -162,12 +185,232 @@ namespace AngularAuthYtAPI.Repository.Implementation
 
                 }).ToList() : new List<TeamTreeViewModel>();
 
-            var dat = model.TeamTree.Sum(a => a.TeamTree.Sum(b => b.TeamTree.Sum(c => c.TeamTree.Sum(d => 
-            d.TeamTree.Sum(e => e.TeamTree.Sum(f => f.TeamTree.Sum(g => g.TeamTree.Sum(h =>
-            h.TeamTree.Sum(h => h.Rate)))))))));
+
 
             return model;
+        }
 
+        public decimal GetTotalAffiliateIncome(int id)
+        {
+            var ttt = GetTeamDetails(id);
+            float sum = 0;
+            sum = ttt.Skip(1).Take(126).Sum(x => x.rate);
+            decimal total = Convert.ToDecimal(sum * 0.025);
+            return total;
+        }
+
+        /// <summary>
+        /// Get Total Team Income for 10 levels
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        public decimal GetTotalTeamIncome(string? userName)
+        {
+            float sum = 0;
+            var model = GetTeamTree(userName);
+            foreach (var a in model.TeamTree)
+            {
+                //levl1
+                sum += a.Rate;
+                if (a.TeamTree.Count() > 0)
+                {
+                    foreach (var b in a.TeamTree)
+                    {
+                        //level2
+                        sum += b.Rate;
+                        if (b.TeamTree.Count > 0)
+                        {
+                            //level3
+                            foreach (var c in b.TeamTree)
+                            {
+                                sum += c.Rate;
+                                if (c.TeamTree.Count > 0)
+                                {
+                                    //level4
+                                    foreach (var d in c.TeamTree)
+                                    {
+                                        sum += d.Rate;
+                                        if (d.TeamTree.Count > 0)
+                                        {
+                                            //level5
+                                            foreach (var e in d.TeamTree)
+                                            {
+                                                sum += e.Rate;
+                                                if (e.TeamTree.Count > 0)
+                                                {
+                                                    //level6
+                                                    foreach (var f in e.TeamTree)
+                                                    {
+                                                        sum += f.Rate;
+                                                        if (f.TeamTree.Count > 0)
+                                                        {
+                                                            //level7
+                                                            foreach (var g in f.TeamTree)
+                                                            {
+                                                                sum += g.Rate;
+                                                                if (g.TeamTree.Count > 0)
+                                                                {
+                                                                    //level8
+                                                                    foreach (var h in g.TeamTree)
+                                                                    {
+                                                                        sum += h.Rate;
+                                                                        if (h.TeamTree.Count > 0)
+                                                                        {
+                                                                            //level9
+                                                                            foreach (var i in h.TeamTree)
+                                                                            {
+                                                                                sum += i.Rate;
+                                                                                if (i.TeamTree.Count > 0)
+                                                                                {
+                                                                                    //level10
+                                                                                    foreach (var j in i.TeamTree)
+                                                                                    {
+                                                                                        sum += j.Rate;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            decimal total = Convert.ToDecimal(sum * 0.015);
+            return total;
+        }
+
+
+        public TeamTreeViewModel GetAutofillTree(string? userName)
+        {
+            var model = new TeamTreeViewModel();
+            var member = GetMember(userName);
+            var ttt = GetTeamDetails(member.Id);
+            var mem = ttt.FirstOrDefault();
+            model.Id = mem.memberId;
+            model.Name = mem.name;
+            model.Level = 1;
+            model.ParentId = mem.parentId;
+            model.Rate = mem.rate;
+            var count = ttt.Count();
+            int a = 1;
+           if(count > 1)
+            {
+                model.TeamTree.AddRange(ttt.Skip(a).Take(2).Select(a => new TeamTreeViewModel
+                {
+                    Id = a.memberId,
+                    Name = a.name,
+                    Level = 2,
+                    ParentId = a.parentId,
+                    Rate = a.rate,
+                    TeamTree = new List<TeamTreeViewModel>()
+                })) ;
+
+                if(count >3)
+                {
+                    a += 2;
+                    for (int i = 0; i < 2; i++)
+                    {
+                        model.TeamTree[i].TeamTree.AddRange(ttt.Skip(a).Take(2).Select(a => new TeamTreeViewModel
+                        {
+                            Id = a.memberId,
+                            Name = a.name,
+                            Level = 3,
+                            ParentId = a.parentId,
+                            Rate = a.rate,
+                            TeamTree = new List<TeamTreeViewModel>()
+                        }));
+                        a+= 2;
+                    }
+                    if(count > 7)
+                    {
+                        for (int i = 0; i < 2; i++)
+                        {
+                            for (int j = 0; j < 2; j++)
+                            {
+                                if(count+2 > a)
+                                { 
+                                model.TeamTree[i].TeamTree[j].TeamTree.AddRange(ttt.Skip(a).Take(2).Select(a => new TeamTreeViewModel
+                                {
+                                    Id = a.memberId,
+                                    Name = a.name,
+                                    Level = 4,
+                                    ParentId = a.parentId,
+                                    Rate = a.rate,
+                                    TeamTree = new List<TeamTreeViewModel>()
+                                }));
+                                a = a + 2;
+                                }
+                            }
+                        }
+
+                        if(count > 15)
+                        {
+                            for (int i = 0; i < 2; i++)
+                            {
+                                for (int j = 0; j < 2; j++)
+                                {
+                                    for (int k = 0; k < 2; k++)
+                                    {
+                                        if (count + 2 > a)
+                                        {
+                                            model.TeamTree[i].TeamTree[j].TeamTree[k].TeamTree.AddRange(ttt.Skip(a).Take(2).Select(a => new TeamTreeViewModel
+                                            {
+                                                Id = a.memberId,
+                                                Name = a.name,
+                                                Level = 5,
+                                                ParentId = a.parentId,
+                                                Rate = a.rate,
+                                                TeamTree = new List<TeamTreeViewModel>()
+                                            }));
+                                            a = a + 2;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (count > 31)
+                            {
+                                for (int i = 0; i < 2; i++)
+                                {
+                                    for (int j = 0; j < 2; j++)
+                                    {
+                                        for (int k = 0; k < 2; k++)
+                                        {
+                                            for (int l = 0; l < 2; l++)
+                                            {
+                                                if (count + 2 > a)
+                                                {
+                                                    model.TeamTree[i].TeamTree[j].TeamTree[k].TeamTree[l].TeamTree.AddRange(ttt.Skip(a).Take(2).Select(a => new TeamTreeViewModel
+                                                    {
+                                                        Id = a.memberId,
+                                                        Name = a.name,
+                                                        Level = 6,
+                                                        ParentId = a.parentId,
+                                                        Rate = a.rate,
+                                                        TeamTree = new List<TeamTreeViewModel>()
+                                                    }));
+                                                    a = a + 2;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return model;
         }
     }
 }

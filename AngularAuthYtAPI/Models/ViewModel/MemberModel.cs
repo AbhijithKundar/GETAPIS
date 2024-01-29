@@ -9,6 +9,16 @@
         public string? MemberFullName { get; set; }
     }
 
+    public class TeamDetail
+    {
+        public int memberId { get; set; }
+        public int? parentId { get; set; }
+        public string? name { get; set; }
+        public int rate { get; set; }
+        public int planId { get; set; }
+
+    }
+
     public class TeamTree
     {
         public int Id { get; set; }
@@ -26,10 +36,12 @@
             TeamTree = new List<TeamTreeViewModel>();
         }
         public int Id { get; set; }
-        public string?  Name { get; set; }
+        public string? Name { get; set; }
         public int? ParentId { get; set; }
         public int Level { get; set; }
         public int Rate { get; set; }
         public List<TeamTreeViewModel> TeamTree { get; set; }
+
     }
+
 }
