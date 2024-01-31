@@ -15,7 +15,8 @@
     <a *ngIf="!isUserLoggedIn" class="d-block side-menu-item" tabindex="0" [routerLink]="['/login']"  (click)="hideMenu()">Login</a>
     <a *ngIf="isUserLoggedIn" class="d-block side-menu-item" tabindex="0" [routerLink]="['/dashboard']"  (click)="hideMenu()">Dashboard</a>
     <a class="d-block side-menu-item" tabindex="0" [routerLink]="['/signup']"  (click)="hideMenu()">Register</a>
-    <a *ngIf="isUserLoggedIn"  tabindex="0" class="d-block side-menu-item" [routerLink]="['/member']" (click)="hideMenu()">Team Member</a>
+    <a *ngIf="isUserLoggedIn"  tabindex="0" class="d-block side-menu-item" [routerLink]="['/member', userName]" (click)="hideMenu()">Team Member</a>
+    <a *ngIf="isUserLoggedIn"  tabindex="0" class="d-block side-menu-item" [routerLink]="['/teamtree', userName]" (click)="hideMenu()">Team Tree</a>
     <a *ngIf="isUserLoggedIn"  tabindex="0" class="d-block side-menu-item" (click)="logout()" (click)="hideMenu()">Logout</a>
 
   </div>

@@ -43,7 +43,6 @@ export class SignupComponent implements OnInit {
 
   onSubmit() {
     if (this.signUpForm.valid) {
-      console.log(this.signUpForm.value);
       let signUpObj = {
         ...this.signUpForm.value,
         role:'',
@@ -52,7 +51,6 @@ export class SignupComponent implements OnInit {
       this.auth.signUp(signUpObj)
       .subscribe({
         next:(res=>{
-          console.log(res.message);
           this.signUpForm.reset();
           this.router.navigate(['login']);
           alert(res.message)

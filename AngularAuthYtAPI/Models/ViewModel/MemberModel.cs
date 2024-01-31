@@ -22,8 +22,11 @@
     public class TeamTree
     {
         public int Id { get; set; }
+        public string? FullName { get; set; }
         public string? Name { get; set; }
         public int TreeOrder { get; set; }
+        public int Rate { get; set; }
+        public string? Package { get; set; }
         public string? Path { get; set; }
         public int Count { get; set; }
         public int ParentId { get; set; }
@@ -42,6 +45,13 @@
         public int Rate { get; set; }
         public List<TeamTreeViewModel> TeamTree { get; set; }
 
+    }
+
+    public class TeamTreeModel
+    {
+        public string? Level { get; set; }
+        public int Count { get; set; }
+        public double TeamIncome { get; set; }
     }
 
 }

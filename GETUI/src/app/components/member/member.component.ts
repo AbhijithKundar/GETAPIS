@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MemberModel } from 'src/app/models/member.model';
+import { MemberModel, TeamTree } from 'src/app/models/member.model';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'app-member',
@@ -9,14 +10,32 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./member.component.scss']
 })
 export class MemberComponent implements OnInit {
- members :MemberModel[] = [];
-
-  constructor(private api : ApiService, private auth: AuthService) { }
+  teamTree: TeamTree[] = [];
+  memberName?: string;
+  isOnLoad: boolean = true;
+  constructor(private api: ApiService, private auth: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.api.getMembersOnUserName(this.auth.getfullNameFromToken()).subscribe(res=>{
-      this.members = res;
-      });
+    this.memberName = this.route.snapshot.paramMap.get('userName')?.toString();
+    if (this.memberName != null) {
+      this.getMember(this.memberName)
+      this.isOnLoad = true;
+
+    }
+  }
+
+  getMember(memberName: string) {
+    this.api.getMembersOnUserName(memberName).subscribe(res => {
+      this.teamTree = res;
+    });
+    this.isOnLoad = false
+  }
+
+  backClicked() {
+    if (this.memberName) {
+      this.getMember(this.memberName);
+      this.isOnLoad = true;
+    }
   }
 
 }

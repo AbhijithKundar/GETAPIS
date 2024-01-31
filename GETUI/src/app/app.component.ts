@@ -13,14 +13,18 @@ export class AppComponent implements OnInit  {
   showMenu: boolean = false;
   isUserLoggedIn: boolean = false;
   tronModel : TronTransactionModel = new TronTransactionModel();
+  userName?: string;
 
 constructor(private auth : AuthService, private tronSrvc: TronService) {
 }
 
 ngOnInit(): void {
   this.isUserLoggedIn = this.auth.isLoggedIn();
+  if(this.isUserLoggedIn)
+  {
+this.userName = this.auth.decodedToken().name;
+  }
   this.tronSrvc.getTransaction().subscribe(res=> {
-    debugger;
     this.tronModel = res;
   });
 }

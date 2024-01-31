@@ -33,8 +33,13 @@ namespace AngularAuthYtAPI.Controllers
 
         [HttpGet("getTeamTree")]
         public ActionResult GetTeamTree(string? userName)
-        {
-            var data = _repository.GetTeamTree(userName);
+        { 
+            var member = _repository.GetMember(userName);
+            if(member is null)
+            {
+                return BadRequest("Invalid User");
+            }
+            var data = _repository.GetTeamTree(member.Id);
             return Ok(data);
         }
 

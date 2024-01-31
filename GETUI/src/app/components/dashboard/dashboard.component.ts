@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit {
   constructor(private api : ApiService, private auth: AuthService, private userStore: UserStoreService) { }
 
   ngOnInit() {
-    this.api.getDashboardOnUserName(this.auth.getfullNameFromToken())
+    this.api.getDashboardOnUserName(this.auth.decodedToken().name)
     .subscribe(res=>{
     this.dashboardDetails = res;
     this.loaded = true;

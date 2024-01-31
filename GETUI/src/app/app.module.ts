@@ -12,6 +12,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import {MatCardModule} from '@angular/material/card';
 import { MemberComponent } from './components/member/member.component';
+import { TeamtreeComponent } from './components/teamtree/teamtree.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { MemberComponent } from './components/member/member.component';
     LoginComponent,
     SignupComponent,
     DashboardComponent,
-    MemberComponent
+    MemberComponent,
+    TeamtreeComponent
   ],
   imports: [
     BrowserModule,

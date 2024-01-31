@@ -144,3 +144,23 @@ img {
     height: 3.125rem;
     line-height: 4.125rem;
   }
+
+  .member-container { 
+    background-color: white;
+    height: 100%;
+    padding-top: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .thead-dark {
+    background-color: #772020;
+    color: white;
+    font-size: 13px;
+    text-align: center;
+ } 
+
+.tbody-mem {
+    font-size: 13px;
+    text-align: center;
+} 

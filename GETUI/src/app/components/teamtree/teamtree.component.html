@@ -1,0 +1,26 @@
+<div class="member-container">
+    <div class="row">
+         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+   
+             <h2>My Team</h2><br>
+             <div class="table-responsive">
+                 <table class="table table-striped table-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Refer Count</th>
+                            <th scope="col">Income(USD)</th>
+                        </tr>
+                    </thead >
+                     <tbody *ngIf="teamTreeModel" class="tbody-mem">
+                         <tr *ngFor="let member of teamTreeModel; let i= index">
+                             <td>{{member.level}}</td>
+                             <td>{{member.count}}</td>
+                             <td>{{member.teamIncome}}</td>
+                         </tr>
+                     </tbody>
+                 </table>
+             </div>
+         </main>
+       </div>
+       </div>

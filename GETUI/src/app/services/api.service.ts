@@ -21,4 +21,7 @@ export class ApiService {
     return this.http.get<any>(`${this.baseUrl}Dashboard/GetDashboard?userName=${name}`);
   }
   
+  getTeamTree(name: string) {
+    return this.http.get<any>(`${this.baseUrl}Member/getTeamTree?userName=${name}`);
+  }
 }

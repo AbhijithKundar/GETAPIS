@@ -40,7 +40,7 @@ namespace AngularAuthYtAPI.Repository.Implementation
                 var sumOfDirect = memberForUser.Sum(x => x.rate);
                 dashboardModel.DirectIncome = sumOfDirect / 2;
                 dashboardModel.AutofillIncome = _memberRepository.GetTotalAffiliateIncome(member.Id);
-                dashboardModel.TeamIncome = _memberRepository.GetTotalTeamIncome(userName);
+                dashboardModel.TeamIncome = (decimal)_memberRepository.GetTeamTree(member.Id).Sum(x=>x.TeamIncome);
                 dashboardModel.RewardIncome = 0;
                 dashboardModel.MagicIncome = 0;
 
